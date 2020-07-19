@@ -6,31 +6,27 @@ if (!file_exists($argv[1])) exit("file doesn't exists \n");
 $board = explode("\n", file_get_contents($argv[1]));
 $nbCol = strlen($board[1]) + 1;
 $nbRow = $board[0] + 1;
+array_shift($board);
 
-$matrice = [];
+$matrice[] = array_fill(0, $nbCol, 0);
 foreach ($board as $key => $value) {
-    if($key == 0){
-        $matrice[] = array_fill(0, $nbCol, 0);
-    } else {
-        $temp = array_map(function($v) { return $v == "." ? 1 : 0; }, str_split($value));
-        array_unshift($temp, 0);
-        $matrice[] = $temp;
-    }
+    $temp = array_map(function ($v) { return $v == "." ? 1 : 0; }, str_split($value));
+    array_unshift($temp, 0);
+    $matrice[] = $temp;
 }
 
 $square = ["x" => 0, "y" => 0, "side" => 0];
-for($y = 1; $y < $nbRow; $y++) { //&& ($nbRow - $x > $square["side"])
-    for($x = 1; $x < $nbCol; $x++) { //&& ($nbCol - $x > $square["side"])
-        if($matrice[$y][$x] != 0) {
-            $ayo = min([$matrice[$y-1][$x-1], $matrice[$y-1][$x], $matrice[$y][$x-1]]) + 1;
+for ($y = 1; $y < $nbRow; $y++) {
+    for ($x = 1; $x < $nbCol; $x++) {
+        if ($matrice[$y][$x] != 0) {
+            $ayo = min([$matrice[$y - 1][$x - 1], $matrice[$y - 1][$x], $matrice[$y][$x - 1]]) + 1;
             $matrice[$y][$x] = $ayo;
-            if($ayo > $square["side"]) $square = ["x" => $x - $ayo, "y" => $y - $ayo, "side" => $ayo];
+            if ($ayo > $square["side"]) $square = ["x" => $x - $ayo, "y" => $y - $ayo, "side" => $ayo];
         }
     }
 }
 
-array_shift($board);
-for($y = $square["y"]; $y < ($square["y"] + $square["side"]); $y++) {
+for ($y = $square["y"]; $y < ($square["y"] + $square["side"]); $y++) {
     $board[$y] =  substr_replace($board[$y], str_repeat("x", $square["side"]), $square["x"], $square["side"]);
 }
 
