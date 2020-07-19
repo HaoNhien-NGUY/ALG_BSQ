@@ -14,8 +14,7 @@ for ($y = 0; $y < $nbRow; $y++) {
         $matrice[] = array_map(function ($v) { return $v == "." ? 1 : 0; }, str_split($board[$y]));
         continue;
     }
-    $temp = str_split($board[$y]);
-    foreach ($temp as $x => $value) {
+    foreach (str_split($board[$y]) as $x => $value) {
         if ($x == 0) {
             $matrice[$y][$x] = $value == "." ? 1 : 0;
         } else if ($value == "o") {
@@ -27,7 +26,6 @@ for ($y = 0; $y < $nbRow; $y++) {
         }
     }
 }
-
 
 for ($y = $square["y"]; $y < ($square["y"] + $square["side"]); $y++) {
     $board[$y] =  substr_replace($board[$y], str_repeat("x", $square["side"]), $square["x"], $square["side"]);
