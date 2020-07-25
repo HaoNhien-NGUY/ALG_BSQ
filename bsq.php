@@ -11,12 +11,17 @@ $matrice = [];
 $square = ["x" => 0, "y" => 0, "side" => 0];
 for ($y = 0; $y < $nbRow; $y++) {
     if ($y == 0) {
-        $matrice[] = array_map(function ($v) { return $v == "." ? 1 : 0; }, str_split($board[$y]));
+        $row = array_map(function ($v) { return $v == "." ? 1 : 0; }, str_split($board[$y]));
+        $matrice[] = $row;
+        $search = array_search(1, $row);
+        if($search !== false) $square = ["x" => $search, "y" => 0, "side" => 1];
         continue;
     }
     foreach (str_split($board[$y]) as $x => $value) {
         if ($x == 0) {
-            $matrice[$y][$x] = $value == "." ? 1 : 0;
+            $val = $value == "." ? 1 : 0;
+            $matrice[$y][$x] = $val;
+            if ($val > $square["side"]) $square = ["x" => 0, "y" => $y, "side" => 1];
         } else if ($value == "o") {
             $matrice[$y][$x] = 0;
         } else {
